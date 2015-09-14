@@ -13,7 +13,7 @@ describe('lambda', function() {
   beforeEach(function() {
     slapBot = jasmine.createSpyObj('slapBot', ['pipelineCheck']);
     lambda = proxyquire('../lambda.js', {
-      './index.js': slapBot,
+      './lib/SlapBot.js': slapBot,
       './config.json': {} //TODO mock config
     });
   });
@@ -148,7 +148,7 @@ describe('lambda', function() {
     slapBot.pipelineCheck.and.returnValue(Promise.resolve());
 
     lambda = proxyquire('../lambda.js', {
-      './index.js': slapBot,
+      './lib/SlapBot.js': slapBot,
       './config.json': mockConfig
     });
 
@@ -171,7 +171,7 @@ describe('lambda', function() {
     slapBot.pipelineCheck.and.returnValue(Promise.reject());
 
     lambda = proxyquire('../lambda.js', {
-      './index.js': slapBot,
+      './lib/SlapBot.js': slapBot,
       './config.json': mockConfig
     });
 

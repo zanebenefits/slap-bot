@@ -1,6 +1,6 @@
 var UTC_ARN = 'arn:aws:sns:us-west-2:522480313337:unreliable-town-clock-topic-N4N94CWNOMTH:3d253d5a-50f2-408c-9206-d7d6aa1696bc';
 
-var slapBot = require('./index.js');
+var slapBot = require('./lib/SlapBot.js');
 
 var chimeOn = {
   minute: 45,
