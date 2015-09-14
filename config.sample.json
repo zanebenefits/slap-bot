@@ -1,0 +1,10 @@
+{
+  "channel": "#test",
+  "webhookUri": "https://hooks.slack.com/services/TEST",
+  "projects": [
+    "zb-ui-base"
+  ],
+  "apiKey": "snap-api-key",
+  "apiUser": "snap-user",
+  "apiOwner": "snap-owner"
+}
