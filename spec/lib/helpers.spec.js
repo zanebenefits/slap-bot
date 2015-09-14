@@ -5,9 +5,12 @@ describe('Helpers', function() {
   var helpers;
   var snap;
   var projects;
+  var bluebirdSpy;
 
   beforeEach(function() {
-    helpers = proxyquire('../../lib/helpers.js', {});
+    bluebirdSpy = jasmine.createSpyObj('bluebird', ['props']);
+    helpers = proxyquire('../../lib/helpers.js', {
+    });
     projects = ['manhattan', 'runway'];
     snap = {
       pipelines: jasmine.createSpyObj('snapMock', ['all'])
@@ -19,13 +22,16 @@ describe('Helpers', function() {
       helpers.getPipelineData = jasmine.createSpy('pipelineData');
       helpers.formatMessage = jasmine.createSpy('formatMessage');
 
-      helpers.getPipelineData.and.returnValue(Promise.resolve('some results'));
+      var pipelineData = {manhattan: Promise.resolve('manhattan results')};
+      var resolvedPipelineData = {manhattan: 'manhattan results'};
+
+      helpers.getPipelineData.and.returnValue(pipelineData);
       helpers.formatMessage.and.returnValue('the message.');
 
       helpers.getMessage(snap, projects, 3).then(function(message) {
         expect(message).toBe('the message.');
         expect(helpers.getPipelineData).toHaveBeenCalledWith(snap, projects, 3);
-        expect(helpers.formatMessage).toHaveBeenCalledWith('some results');
+        expect(helpers.formatMessage).toHaveBeenCalledWith(resolvedPipelineData);
         done();
       });
     });
