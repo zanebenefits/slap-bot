@@ -178,8 +178,8 @@ describe('lambda', function() {
     lambda.handler(event, {
       done: function(err, results) {
         expect(slapBot.pipelineCheck).toHaveBeenCalledWith(mockConfig);
-        expect(results).toBe(SLAP_COMPLETE);
-        expect(err).toBe(null);
+        expect(results).toBe(undefined);
+        expect(err).toBe('No slap performed. There was an issue.');
         done();
       }
     });
@@ -195,8 +195,8 @@ function testNoSlap(lambda, event, done) {
 }
 
 function expectNoSlap(done, err, results) {
-  expect(err).toBe(NO_SLAP);
-  expect(results).toBe(undefined);
+  expect(err).toBe(null);
+  expect(results).toBe(NO_SLAP);
   done();    
 }
 

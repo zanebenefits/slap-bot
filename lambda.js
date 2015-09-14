@@ -14,12 +14,15 @@ module.exports.handler = function(event, context) {
   var options = require('./config.json');
 
   if(event.Records && event.Records[0] && isItTimeToChime(event.Records[0])) {
-    slapBot.pipelineCheck(options).finally(function() {
+    slapBot.pipelineCheck(options).then(function() {
       context.done(null, 'Slap complete.');
+    }).catch(function() {
+      console.log('[SLAP ERROR]: ', arguments);
+      context.done('No slap performed. There was an issue.');
     });
   }
   else {
-    context.done('No slap performed.');
+    context.done(null, 'No slap performed.');
   }
 };
 
