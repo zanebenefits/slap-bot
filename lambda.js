@@ -2,18 +2,18 @@ var UTC_ARN = 'arn:aws:sns:us-west-2:522480313337:unreliable-town-clock-topic-N4
 
 var slapBot = require('./lib/SlapBot.js');
 
-var chimeOn = {
-  minute: 45,
-  hour: 15 // 9 a.m. mountain
-};
-
 // entry point for Lambda
 module.exports.handler = function(event, context) {
   console.log('EVENT: ', JSON.stringify(event));
 
   var options = require('./config.json');
 
-  if(event.Records && event.Records[0] && isItTimeToChime(event.Records[0])) {
+  if(!options || !options.chimeOn || isNaN(options.chimeOn.minute) || isNaN(options.chimeOn.hour)) {
+    return context.done('No slap performed. chimeOn hour and minute must be defined in config.json.');
+  }
+
+
+  if(event.Records && event.Records[0] && isItTimeToChime(event.Records[0], options.chimeOn)) {
     slapBot.pipelineCheck(options).then(function() {
       context.done(null, 'Slap complete.');
     }).catch(function() {
@@ -26,7 +26,7 @@ module.exports.handler = function(event, context) {
   }
 };
 
-function isItTimeToChime(record) {
+function isItTimeToChime(record, chimeOn) {
   if(record.EventSource !== 'aws:sns' || record.EventSubscriptionArn !== UTC_ARN || !record.Sns || !record.Sns.Message) {
     console.error('Unauthorized event! Not chiming!');
     return false;
@@ -36,11 +36,13 @@ function isItTimeToChime(record) {
 
   var day = (new Date(message.timestamp)).getUTCDay();
 
-  if(day === 0 || day === 6) {
+  if(chimeOn.weekdaysOnly && (day === 0 || day === 6)) {
     return false; // No weekends!
   }
 
-  if(message.type === 'chime' && parseInt(message.minute) === chimeOn.minute && parseInt(message.hour) === chimeOn.hour) {
+  if(message.type === 'chime' &&
+      parseInt(message.minute) === parseInt(chimeOn.minute) &&
+      parseInt(message.hour) === parseInt(chimeOn.hour)) {
     return true;
   }
 

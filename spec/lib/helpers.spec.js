@@ -197,19 +197,12 @@ describe('Helpers', function() {
 });
 
 function notInProductionPipelineData() {
-  return {
-    _embedded: {
-      pipelines: [
-        {
-          result: 'passed',
-          stages: [
-            {name: 'build', result: 'passed'},
-            {name: 'production', result: null, started_at: null}
-          ]
-        }
-      ]
-    }
-  }
+  var data = inProductionPipelineData();
+
+  data._embedded.pipelines[0].stages[1].result = null;
+  data._embedded.pipelines[0].stages[1].started_at = null;
+
+  return data;
 }
 
 function inProductionPipelineData() {
