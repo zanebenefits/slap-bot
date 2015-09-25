@@ -3,5 +3,5 @@
 ./build.sh
 
 aws lambda update-function-code \
-  --function-name utcTest \
+  --function-name slapBot \
   --zip-file fileb://$(pwd)/dist/lambda.zip
