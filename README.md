@@ -1,3 +1,5 @@
+[![Build Status](https://snap-ci.com/zanebenefits/slap-bot/branch/master/build_image)](https://snap-ci.com/zanebenefits/slap-bot/branch/master)
+
 # slap-bot
 slap-bot combines Slack with Snap-CI. With slap-bot you can notify your team when any of your pipelines get stale. 
 In the near future you will be able to trigger stages(e.g. deploy to production) directly from slack.
