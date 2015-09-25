@@ -15,7 +15,7 @@ In the near future you will be able to trigger stages(e.g. deploy to production)
 1. Create a `config.json` file based on `config.sample.json`.
 1. Make sure you can build `./build.sh`
 1. Create the slap-bot Lambda with role ARN `./awsCreateLambda.sh "arn:aws:iam::123456789:role/lambda_basic_execution"`
-1. Test slap-bot will ignore chimes: `./awsInvoke.sh chime.json`
+1. Test slap-bot will ignore chimes: `./awsInvoke.sh dontchime.json`
 1. Test slap-bot will call snap and send a message: `./awsInvoke.sh chime.json`
 1. Get Lambda ARN from AWS Console or `aws lambda list-functions`
 1. Now that everything works subscribe to the Unreliable Town Clock `./scripts/subscribeLambdaSns.sh "arn:aws:lambda:us-west-2:123456789:function:slapBot"`
