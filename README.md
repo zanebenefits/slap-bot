@@ -12,7 +12,7 @@ In the near future you will be able to trigger stages(e.g. deploy to production)
 
 ## Setup
 1. clone this project `git clone https://github.com/zanebenefits/slap-bot`
-1. Create a `config.json` file based on `config.sample.json`.
+1. Create a `config.js` file based on `config.sample.js`.
 1. Make sure you can build `./build.sh`
 1. Create the slap-bot Lambda with role ARN `./awsCreateLambda.sh "arn:aws:iam::123456789:role/lambda_basic_execution"`
 1. Test slap-bot will ignore chimes: `./awsInvoke.sh dontchime.json`

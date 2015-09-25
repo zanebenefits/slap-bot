@@ -6,10 +6,10 @@ var slapBot = require('./lib/SlapBot.js');
 module.exports.handler = function(event, context) {
   console.log('EVENT: ', JSON.stringify(event));
 
-  var options = require('./config.json');
+  var options = require('./config.js');
 
   if(!options || !options.chimeOn || isNaN(options.chimeOn.minute) || isNaN(options.chimeOn.hour)) {
-    return context.done('No slap performed. chimeOn hour and minute must be defined in config.json.');
+    return context.done('No slap performed. chimeOn hour and minute must be defined in config.js.');
   }
 
 

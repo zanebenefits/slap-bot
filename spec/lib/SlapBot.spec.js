@@ -16,7 +16,7 @@ describe('SlapBot', function() {
     var testConfig;
 
     beforeEach(function() {
-      testConfig = copy(require('../testConfig.json'));
+      testConfig = copy(require('../testConfig.js'));
       helperSpy = jasmine.createSpyObj('helpers', ['getPipelineData', 'getMessage', 'hasLastStageBeenTriggeredWithin']);
       slackSpy = jasmine.createSpyObj('slackSpy', ['setWebhook', 'webhook']);;
       snapSpy = jasmine.createSpy('snapSpy');

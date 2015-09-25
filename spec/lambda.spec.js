@@ -14,7 +14,7 @@ describe('lambda', function() {
     slapBot = jasmine.createSpyObj('slapBot', ['pipelineCheck']);
     lambda = proxyquire('../lambda.js', {
       './lib/SlapBot.js': slapBot,
-      './config.json': {
+      './config.js': {
         chimeOn: {
           weekdaysOnly: true,
           minute: 45,
@@ -149,13 +149,13 @@ describe('lambda', function() {
   it('should call context.done() when pipelineCheck resolves', function(done) {
     var event = validUTCEvent();
 
-    var mockConfig = require('./testConfig.json');
+    var mockConfig = require('./testConfig.js');
     
     slapBot.pipelineCheck.and.returnValue(Promise.resolve());
 
     lambda = proxyquire('../lambda.js', {
       './lib/SlapBot.js': slapBot,
-      './config.json': mockConfig
+      './config.js': mockConfig
     });
 
     lambda.handler(event, {
@@ -172,13 +172,13 @@ describe('lambda', function() {
   it('should call context.done() when pipelineCheck rejects', function(done) {
     var event = validUTCEvent();
 
-    var mockConfig = require('./testConfig.json');
+    var mockConfig = require('./testConfig.js');
     
     slapBot.pipelineCheck.and.returnValue(Promise.reject());
 
     lambda = proxyquire('../lambda.js', {
       './lib/SlapBot.js': slapBot,
-      './config.json': mockConfig
+      './config.js': mockConfig
     });
 
     lambda.handler(event, {
@@ -195,7 +195,7 @@ describe('lambda', function() {
   it('should require chimeOn to be defined', function(done) {
     var event = validUTCEvent();
 
-    var mockConfig = require('./testConfig.json');
+    var mockConfig = require('./testConfig.js');
 
     mockConfig.chimeOn = null;
 
@@ -203,14 +203,14 @@ describe('lambda', function() {
 
     lambda = proxyquire('../lambda.js', {
       './lib/SlapBot.js': slapBot,
-      './config.json': mockConfig
+      './config.js': mockConfig
     });
 
     lambda.handler(event, {
       done: function(err, results) {
         expect(slapBot.pipelineCheck).not.toHaveBeenCalledWith(mockConfig);
         expect(results).toBe(undefined);
-        expect(err).toBe('No slap performed. chimeOn hour and minute must be defined in config.json.');
+        expect(err).toBe('No slap performed. chimeOn hour and minute must be defined in config.js.');
         done();
       }
     });
@@ -219,7 +219,7 @@ describe('lambda', function() {
   it('should require chimeOn.minute to be a number', function(done) {
     var event = validUTCEvent();
 
-    var mockConfig = require('./testConfig.json');
+    var mockConfig = require('./testConfig.js');
 
     mockConfig.chimeOn = {
       minute: 'asdf',
@@ -230,14 +230,14 @@ describe('lambda', function() {
 
     lambda = proxyquire('../lambda.js', {
       './lib/SlapBot.js': slapBot,
-      './config.json': mockConfig
+      './config.js': mockConfig
     });
 
     lambda.handler(event, {
       done: function(err, results) {
         expect(slapBot.pipelineCheck).not.toHaveBeenCalledWith(mockConfig);
         expect(results).toBe(undefined);
-        expect(err).toBe('No slap performed. chimeOn hour and minute must be defined in config.json.');
+        expect(err).toBe('No slap performed. chimeOn hour and minute must be defined in config.js.');
         done();
       }
     });
@@ -246,7 +246,7 @@ describe('lambda', function() {
   it('should require chimeOn.hour to be a number', function(done) {
     var event = validUTCEvent();
 
-    var mockConfig = require('./testConfig.json');
+    var mockConfig = require('./testConfig.js');
 
     mockConfig.chimeOn = {
       minute: 45,
@@ -257,14 +257,14 @@ describe('lambda', function() {
 
     lambda = proxyquire('../lambda.js', {
       './lib/SlapBot.js': slapBot,
-      './config.json': mockConfig
+      './config.js': mockConfig
     });
 
     lambda.handler(event, {
       done: function(err, results) {
         expect(slapBot.pipelineCheck).not.toHaveBeenCalledWith(mockConfig);
         expect(results).toBe(undefined);
-        expect(err).toBe('No slap performed. chimeOn hour and minute must be defined in config.json.');
+        expect(err).toBe('No slap performed. chimeOn hour and minute must be defined in config.js.');
         done();
       }
     });
