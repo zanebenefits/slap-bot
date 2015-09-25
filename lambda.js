@@ -8,12 +8,12 @@ module.exports.handler = function(event, context) {
 
   var options = require('./config.js');
 
-  if(!options || !options.chimeOn || isNaN(options.chimeOn.minute) || isNaN(options.chimeOn.hour)) {
-    return context.done('No slap performed. chimeOn hour and minute must be defined in config.js.');
+  if(!options || (options.hasOwnProperty('doChime') && typeof options.doChime !== 'function')) {
+    return context.done('No slap performed. doChime must be a function.');
   }
 
 
-  if(event.Records && event.Records[0] && isItTimeToChime(event.Records[0], options.chimeOn)) {
+  if(event.Records && event.Records[0] && isItTimeToChime(event.Records[0], options.doChime)) {
     slapBot.pipelineCheck(options).then(function() {
       context.done(null, 'Slap complete.');
     }).catch(function() {
@@ -26,7 +26,7 @@ module.exports.handler = function(event, context) {
   }
 };
 
-function isItTimeToChime(record, chimeOn) {
+function isItTimeToChime(record, doChime) {
   if(record.EventSource !== 'aws:sns' || record.EventSubscriptionArn !== UTC_ARN || !record.Sns || !record.Sns.Message) {
     console.error('Unauthorized event! Not chiming!');
     return false;
@@ -34,36 +34,36 @@ function isItTimeToChime(record, chimeOn) {
 
   var message = JSON.parse(record.Sns.Message);
 
-  var day = (new Date(message.timestamp)).getUTCDay();
-
-  if(chimeOn.weekdaysOnly && (day === 0 || day === 6)) {
-    return false; // No weekends!
+  if(doChime) {
+    return doChime(message);
   }
-
-  if(message.type === 'chime' &&
-      parseInt(message.minute) === parseInt(chimeOn.minute) &&
-      parseInt(message.hour) === parseInt(chimeOn.hour)) {
-    return true;
+  else {
+    return defaultDoChime(message);
   }
 
   console.error('Message type(', message.type, ') not equal to "chime" and wrong minute(', message.minute, ') so no chime for you!');
   return false;
 }
 
-// Example chime event
-//{
-//   "type" : "chime",
-//   "timestamp": "2015-05-26 02:15 UTC",
-//   "year": "2015",
-//   "month": "05",
-//   "day": "26",
-//   "hour": "02",
-//   "minute": "15",
-//   "day_of_week": "Tue",
-//   "unique_id": "2d135bf9-31ba-4751-b46d-1db6a822ac88",
-//   "region": "us-east-1",
-//   "sns_topic_arn": "arn:aws:sns:...",
-//   "reference": "...",
-//   "support": "...",
-//   "disclaimer": "UNRELIABLE SERVICE {ACCURACY,CONSISTENCY,UPTIME,LONGEVITY}"
-// }
+/**
+ * By Default we only chime on weekdays @ 9:45 a.m. mountain time. You may override this method by providing your own
+ * doChime() in config.js.
+ *
+ * @param message contains date/time properties based on UTC. See config.sample.js for an example
+ * @returns {boolean}
+ */
+function defaultDoChime(message) {
+  var day = (new Date(message.timestamp)).getUTCDay();
+
+  if(day === 0 || day === 6) {
+    return false; // No weekends!
+  }
+
+  if(message.type === 'chime' &&
+      parseInt(message.minute) === 45 &&
+      parseInt(message.hour) === 15) {
+    return true;
+  }
+
+  return false;
+}
