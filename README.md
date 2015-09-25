@@ -6,8 +6,8 @@ In the near future you will be able to trigger stages(e.g. deploy to production)
 1. Snap-CI Account and api key
 1. Snap-CI Project
 1. Slack Incoming Webhooks URI
-1. AWS CLI[https://aws.amazon.com/cli/]
-1. Lambda Basic Execution Role(created during hello world example or see Step 2.2[http://docs.aws.amazon.com/lambda/latest/dg/walkthrough-custom-events-create-test-function.html])
+1. [AWS CLI](https://aws.amazon.com/cli/)
+1. Lambda Basic Execution Role(created during hello world example or see the [Walkthrough Step 2.2](http://docs.aws.amazon.com/lambda/latest/dg/walkthrough-custom-events-create-test-function.html))
 
 
 ## Setup
